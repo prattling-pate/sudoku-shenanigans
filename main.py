@@ -1,6 +1,19 @@
 from file_reader import read_file
-from sudoku_solver import solve_sudoku_problem_implementation_one, solve_sudoku_problem_implementation_two
+from sudoku_solver import solve_sudoku_implementation_heuristic, solve_sudoku_implementation_normal
+from time import time
 import sys
+
+
+def print_solution(solution):
+    for line in solution:
+        print(line)
+
+
+def time_function(f, *args):
+    start = time()
+    value = f(*args)
+    print(f"Time taken: {time() - start}s")
+    print_solution(value)
 
 
 def main():
@@ -11,10 +24,11 @@ def main():
         print("original problem")
         for line in problem:
             print(line)
-        soln = solve_sudoku_problem_implementation_two(problem)
         print("solution")
-        for line in soln:
-            print(line)
+        print("Heuristic solution")
+        time_function(solve_sudoku_implementation_heuristic, problem)
+        print("non-heuristic solution")
+        time_function(solve_sudoku_implementation_normal, problem)
 
 
 if __name__ == "__main__":

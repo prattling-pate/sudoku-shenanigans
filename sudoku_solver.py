@@ -19,26 +19,6 @@ def possibilities(P: IntegerMatrix, i: int, j: int) -> set[int]:
     return possibilities_set
 
 
-def solve_sudoku_problem_implementation_one(P: IntegerMatrix):
-    """
-    Solves a given sudoku matrix, only solves problems with a distinct solution
-    Cannot solve sudoku problems in which experimentation is required
-    (uses the idea that in some places only one move is correct)
-    """
-    if (len(P) != len(P[0])):
-        return SudokuException()
-    finished: bool = False
-    while not finished:
-        finished = True
-        for i in range(len(P)):
-            for j in range(len(P)):
-                if P[i][j] != 0:
-                    continue
-                if len(possibilities(P, i, j)) == 1:
-                    P[i][j] = possibilities(P, i, j).pop()
-                    finished = False
-
-
 def find_minimum_possibility_i_j(P):
     minimum = 0
     minimum_i_j = (0, 0)
@@ -80,7 +60,7 @@ def recurse(f, P, minimums, i, j):
     return result
 
 
-def solve_sudoku_problem_implementation_two(P: IntegerMatrix):
+def solve_sudoku_implementation_heuristic(P: IntegerMatrix):
     """
     Solves a given sudoku matrix, only solves problems with a distinct solution
     Uses recursion (backtracking) to solve sudoku problems under uncertainty, always provides 
@@ -93,11 +73,6 @@ def solve_sudoku_problem_implementation_two(P: IntegerMatrix):
         P)
     # we are done
     if len(possibilities_minimum) == 0:
-        # display the sudoku grid
-        for line in P:
-            print(line)
-        for line in P:
-            print("\033[A                             \033[A")
         # backtrack case - no solution ... yet
         if not valid_solution(P):
             return []
@@ -107,13 +82,44 @@ def solve_sudoku_problem_implementation_two(P: IntegerMatrix):
     P_copy = copy.deepcopy(P)
     P_copy[minimum_possibility_entry[0]
            ][minimum_possibility_entry[1]] = possibilities_minimum.pop()
-    return recurse(solve_sudoku_problem_implementation_two,
+    return recurse(solve_sudoku_implementation_heuristic,
                    P_copy, possibilities_minimum, *minimum_possibility_entry)
 
 
+def get_first_possibility(P):
+    n = len(P)
+    for i in range(n):
+        for j in range(n):
+            if (P[i][j] != 0):
+                continue
+            possibilities_i_j = possibilities(P, i, j)
+            return (i, j), possibilities_i_j
+    return (0, 0), set()
+
+
 # implement one without hte heuristic and compare performance times???
-def solve_sudoku_implementation_three(P: IntegerMatrix):
-    pass
+def solve_sudoku_implementation_normal(P: IntegerMatrix):
+    """
+    Solves a given sudoku matrix, only solves problems with a distinct solution
+    Uses recursion (backtracking) to solve sudoku problems under uncertainty, always provides 
+    a solution (provided one exists).
+    Has an added heuristic which picks the moves with the lowest uncertainty (lowest possible moves)
+    """
+    if (len(P) != len(P[0])):
+        raise SudokuException()
+    possibility_entry, possibilities = get_first_possibility(P)
+    # we are done
+    if len(possibilities) == 0:
+        if not valid_solution(P):
+            return []
+        # display the sudoku grid
+            # base case - solution found
+        return P
+    # assume that a random one of these is the solution
+    P_copy = copy.deepcopy(P)
+    P_copy[possibility_entry[0]][possibility_entry[1]] = possibilities.pop()
+    return recurse(solve_sudoku_implementation_normal,
+                   P_copy, possibilities, *possibility_entry)
 
 
 class SudokuException(Exception):
