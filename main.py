@@ -9,15 +9,14 @@ def print_solution(solution):
         print(line)
 
 
-def time_function(f, *args):
+def time_function(function, *args):
     start = time()
-    value = f(*args)
+    value = function(*args)
     print(f"Time taken: {time() - start}s")
     print_solution(value)
 
 
 def main():
-    sys.setrecursionlimit(1000)
     files = sys.argv[1:]
     for file in files:
         problem = read_file(file)
