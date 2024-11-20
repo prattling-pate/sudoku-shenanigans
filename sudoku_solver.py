@@ -5,7 +5,7 @@ from typing import Tuple
 type IntegerMatrix = list[list[int]]
 
 
-def possibilities(problem: IntegerMatrix, i: int, j: int) -> set[int]:
+def get_possibilities(problem: IntegerMatrix, i: int, j: int) -> set[int]:
     """
     Returns all possible plays on the current square in the sudoku matrix
     """
@@ -37,16 +37,16 @@ def find_minimum_possibility_i_j(problem: IntegerMatrix) -> Tuple[Tuple[int, int
                 continue
             if minimum == 0:
                 minimum_i_j = (i, j)
-                possibilities_minimum = possibilities(problem, i, j)
+                possibilities_minimum = get_possibilities(problem, i, j)
                 minimum = len(possibilities_minimum)
-            elif minimum > len(possibilities(problem, i, j)):
+            elif minimum > len(get_possibilities(problem, i, j)):
                 minimum_i_j = (i, j)
-                possibilities_minimum = possibilities(problem, i, j)
-                minimum = len(possibilities(problem, i, j))
+                possibilities_minimum = get_possibilities(problem, i, j)
+                minimum = len(get_possibilities(problem, i, j))
     return minimum_i_j, possibilities_minimum
 
 
-def valid_solution(problem: IntegerMatrix) -> bool:
+def is_valid_solution(problem: IntegerMatrix) -> bool:
     """
     Checks if the constructed solution is a valid solution by checking if there are any 0 entries
     (by construction the rules of sudoku are not violated so we do not check for those)
@@ -87,7 +87,7 @@ def solve_sudoku_implementation_heuristic(problem: IntegerMatrix) -> IntegerMatr
     # we are done
     if len(possibilities_minimum) == 0:
         # backtrack case - no solution ... yet
-        if not valid_solution(problem):
+        if not is_valid_solution(problem):
             return []
         # base case - solution found
         return problem
@@ -105,7 +105,7 @@ def get_first_possibility(problem: IntegerMatrix) -> Tuple[Tuple[int, int], set[
         for j in range(n):
             if (problem[i][j] != 0):
                 continue
-            possibilities_i_j = possibilities(problem, i, j)
+            possibilities_i_j = get_possibilities(problem, i, j)
             return (i, j), possibilities_i_j
     return (0, 0), set()
 
@@ -126,7 +126,7 @@ def solve_sudoku_implementation_normal(problem: IntegerMatrix) -> IntegerMatrix:
     # we are done
     if len(possibilities) == 0:
         # backtrack if not valid solution
-        if not valid_solution(problem):
+        if not is_valid_solution(problem):
             return []
         # base case - solution found
         return problem
