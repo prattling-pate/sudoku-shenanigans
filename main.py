@@ -4,7 +4,7 @@ from time import time
 import sys
 
 
-def print_solution(solution):
+def print_problem(solution):
     for line in solution:
         print(line)
 
@@ -13,7 +13,7 @@ def time_function(function, *args):
     start = time()
     value = function(*args)
     print(f"Time taken: {time() - start}s")
-    print_solution(value)
+    print_problem(value)
 
 
 def main():
@@ -21,8 +21,7 @@ def main():
     for file in files:
         problem = read_file(file)
         print("original problem")
-        for line in problem:
-            print(line)
+        print_problem(problem)
         print("Solutions")
         print("Heuristic solution")
         time_function(solve_sudoku_implementation_heuristic, problem)
