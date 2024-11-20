@@ -28,14 +28,14 @@ def find_minimum_possibility_i_j(problem: IntegerMatrix) -> Tuple[Tuple[int, int
     """
     Returns the entry in the sudoku problem matrix with the least possibilities along with its possibilities
     """
-    minimum = 0
+    minimum = -1
     minimum_i_j = (0, 0)
     possibilities_minimum = set()
     for i in range(len(problem)):
         for j in range(len(problem)):
             if problem[i][j] != 0:
                 continue
-            if minimum == 0:
+            if minimum == -1:
                 minimum_i_j = (i, j)
                 possibilities_minimum = get_possibilities(problem, i, j)
                 minimum = len(possibilities_minimum)
@@ -61,14 +61,14 @@ def is_valid_solution(problem: IntegerMatrix) -> bool:
     return True
 
 
-def backtrack_on_problem(solving_function: Callable, problem: IntegerMatrix, minimums: set[int], i: int, j: int) -> IntegerMatrix:
+def backtrack_on_problem(solving_function: Callable, problem: IntegerMatrix, possibilities: set[int], i: int, j: int) -> IntegerMatrix:
     result = solving_function(problem)
     # if result is empty -> backtrack
     if result == []:
         problem_copy = copy.deepcopy(problem)
-        if len(minimums) > 0:
-            problem_copy[i][j] = minimums.pop()
-            return backtrack_on_problem(solving_function, problem_copy, minimums, i, j)
+        if len(possibilities) > 0:
+            problem_copy[i][j] = possibilities.pop()
+            return backtrack_on_problem(solving_function, problem_copy, possibilities, i, j)
     return result
 
 
