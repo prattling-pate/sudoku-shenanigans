@@ -23,10 +23,10 @@ def main():
         print("original problem")
         for line in problem:
             print(line)
-        print("solution")
+        print("Solutions")
         print("Heuristic solution")
         time_function(solve_sudoku_implementation_heuristic, problem)
-        print("non-heuristic solution")
+        print("Non-heuristic solution")
         time_function(solve_sudoku_implementation_normal, problem)
 
 
