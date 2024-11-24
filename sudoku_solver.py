@@ -80,7 +80,7 @@ def solve_sudoku_implementation_heuristic(problem: IntegerMatrix) -> IntegerMatr
     Has an added heuristic which picks the moves with the lowest uncertainty (lowest possible moves)
     """
     # problem is a non-square matrix -> not a sudoku problem
-    if (len(problem) != len(problem[0]) or len(problem) != len(problem[0]) or len(problem) ** 2 != len(problem)*len(problem[0])):
+    if (len(problem) != len(problem[0]) or len(problem) ** 2 != len(problem)*len(problem[0])):
         raise SudokuException()
     minimum_possibility_entry, possibilities_minimum = find_minimum_possibility_i_j(
         problem)
@@ -120,7 +120,7 @@ def solve_sudoku_implementation_normal(problem: IntegerMatrix) -> IntegerMatrix:
     """
 
     # problem is a non-square matrix -> not a sudoku problem
-    if (len(problem) != len(problem[0]) or len(problem) != len(problem[0]) or len(problem) ** 2 != len(problem)*len(problem[0])):
+    if (len(problem) != len(problem[0]) or len(problem) ** 2 != len(problem)*len(problem[0])):
         raise SudokuException()
     possibility_entry, possibilities = get_first_possibility(problem)
     # we are done
